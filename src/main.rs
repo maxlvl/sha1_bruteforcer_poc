@@ -1,6 +1,8 @@
-use std:: {
+use std::{
     env,
-    error: Error,
+    error::Error,
+    fs::File,
+    io::{BufRead, BufReader},
 };
 
 const SHA1_HEX_STRING_LENGTH: usize = 40;
@@ -19,5 +21,12 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Err("Invalid sha1 hash".into());
     }
 
+    let wordlist_file = File::open(&args[1])?;
+    let reader = BufReader::new(&wordlist_file);
+
+    for line in reader.lines() {
+        let line = line?.trim().to_string();
+        println!("{}", line);
+    }
     Ok(())
 }
